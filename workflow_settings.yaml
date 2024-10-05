@@ -1,0 +1,5 @@
+defaultProject: dicp-430603
+defaultLocation: US
+defaultDataset: dataform
+defaultAssertionDataset: dataform_assertions
+dataformCoreVersion: 3.0.0
