@@ -3,7 +3,7 @@
 
 -- You can delete this file, then commit and push your changes to your repository when you are ready.
 
--- Config blocks allow you to configure, document, and test your data assets.
+-- Config blocks allow you to configure, document, and test your data assets...
 config {
   type: "view", // Creates a view in BigQuery. Try changing to "table" instead.
   columns: {
