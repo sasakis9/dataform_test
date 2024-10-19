@@ -1,0 +1,5 @@
+config {
+  type: "declaration",
+  schema: "import",
+  name: "item_20241013"
+}
