@@ -1,0 +1,21 @@
+config {
+  type: "operations",
+  hasOutput: true,
+  schema: "import",
+  description: "Loads daily member data from GCS into BigQuery"
+}
+
+js {
+  // 日付やファイルパスの設定をJavaScriptで動的に宣言
+  const gcsFilePath = `gs://d4c-dicp-private/member_${dataform.projectConfig.vars.workflow_date}.csv`;
+  const projectName = dataform.projectConfig.defaultDatabase;
+  const schemaName = "import"; 
+}
+
+load data into ${projectName}.${schemaName}.member_${dataform.projectConfig.vars.workflow_date}
+(memberid STRING, gender STRING, age INT64, address STRING, created_at TIMESTAMP)
+from files(
+    format = 'CSV',
+    skip_leading_rows = 1,
+    uris = ["${gcsFilePath}"]
+)
