@@ -1,0 +1,24 @@
+-- Filename: definitions/load_sales.sqlx
+
+config {
+  type: "operations",
+  hasOutput: true,
+  schema: "import",
+  description: "Loads daily sales data from GCS into BigQuery"
+}
+
+js {
+  // 日付やファイルパスの設定をJavaScriptで動的に宣言
+  const gcsFilePath = `gs://d4c-dicp-private/sales_${dataform.projectConfig.vars.workflow_date}.csv`;
+  const projectName = dataform.projectConfig.defaultDatabase;
+  const schemaName = "import"; 
+}
+
+load data into ${projectName}.${schemaName}.sales_${dataform.projectConfig.vars.workflow_date}
+(slipid STRING, linenumber STRING, salesdate STRING, memberid STRING, productid STRING, storeid STRING, amount INT64, quantity INT64, created_at TIMESTAMP)
+from files(
+    format = 'CSV',
+    skip_leading_rows = 1,
+    uris = ["${gcsFilePath}"]
+)
+

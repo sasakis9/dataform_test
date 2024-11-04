@@ -1,5 +1,0 @@
-config {
-  type: "declaration",
-  schema: "import",
-  name: `item_${dataform.projectConfig.vars.workflow_date}`
-}
