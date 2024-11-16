@@ -9,7 +9,7 @@ config {
 
 js {
   // 日付やファイルパスの設定をJavaScriptで動的に宣言
-  const gcsFilePath = `gs://d4c-dicp-private/sales_${dataform.projectConfig.vars.workflow_date}.csv`;
+  const gcsFilePath = `gs://d4c-dicp-private/${dataform.projectConfig.vars.workflow_date.substring(0, 4)}/${dataform.projectConfig.vars.workflow_date.substring(4, 6)}/${dataform.projectConfig.vars.workflow_date.substring(6, 8)}/sales_${dataform.projectConfig.vars.workflow_date}.csv`;
   const projectName = dataform.projectConfig.defaultDatabase;
   const schemaName = "import"; 
 }
