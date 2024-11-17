@@ -13,7 +13,7 @@ js {
 }
 
 -- 既存データを削除（洗い替え）
-TRUNCATE TABLE ${projectName}.${schemaName}.member_${dataform.projectConfig.vars.workflow_date};
+DROP TABLE IF EXISTS `${projectName}.${schemaName}.member_${dataform.projectConfig.vars.workflow_date}`;
 
 load data into ${projectName}.${schemaName}.member_${dataform.projectConfig.vars.workflow_date}
 (memberid STRING, gender STRING, age INT64, address STRING, created_at TIMESTAMP)

@@ -15,7 +15,7 @@ js {
 }
 
 -- 既存データを削除（洗い替え）
-TRUNCATE TABLE ${projectName}.${schemaName}.sales_${dataform.projectConfig.vars.workflow_date};
+DROP TABLE IF EXISTS `${projectName}.${schemaName}.sales_${dataform.projectConfig.vars.workflow_date}`;
 
 load data into ${projectName}.${schemaName}.sales_${dataform.projectConfig.vars.workflow_date}
 (slipid STRING, linenumber STRING, salesdate STRING, memberid STRING, productid STRING, storeid STRING, amount INT64, quantity INT64, created_at TIMESTAMP)
