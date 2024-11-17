@@ -1,0 +1,54 @@
+config {
+  type: "operations",
+  schema: "work",
+  dependencies: ["import_sales"]
+}
+
+js {
+  const projectName = dataform.projectConfig.defaultDatabase;
+  const schemaName = "work"; 
+}
+
+MERGE INTO
+  `${projectName}.work.sales` AS A
+USING
+  `${projectName}.import.sales_${dataform.projectConfig.vars.workflow_date}` AS B
+ON
+      A.slipid = B.slipid
+  AND A.linenumber = B.linenumber
+    WHEN MATCHED THEN UPDATE SET
+    A.slipid = B.slipid,
+    A.linenumber = B.linenumber,
+    A.salesdate = DATETIME(B.salesdate),
+    A.memberid = B.memberid,
+    A.productid = B.productid,
+    A.storeid = B.storeid,
+    A.amount = B.amount,
+    A.quantity = B.quantity,
+    A.created_at = B.created_at
+  WHEN NOT MATCHED
+  THEN
+INSERT
+  (
+  slipid,
+  linenumber,
+  salesdate,
+  memberid,
+  productid,
+  storeid,
+  amount,
+  quantity,
+  created_at
+  )
+VALUES
+  (
+  B.slipid,
+  B.linenumber,
+  DATETIME(B.salesdate),
+  B.memberid,
+  B.productid,
+  B.storeid,
+  B.amount,
+  B.quantity,
+  B.created_at
+  )

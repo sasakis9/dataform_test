@@ -1,0 +1,21 @@
+config {
+  type: "operations",
+  hasOutput: true,
+  schema: "import",
+  description: "Loads daily item data from GCS into BigQuery"
+}
+
+js {
+  // 日付やファイルパスの設定をJavaScriptで動的に宣言
+  const gcsFilePath = `gs://d4c-dicp-private/${dataform.projectConfig.vars.workflow_date.substring(0, 4)}/${dataform.projectConfig.vars.workflow_date.substring(4, 6)}/${dataform.projectConfig.vars.workflow_date.substring(6, 8)}/item_${dataform.projectConfig.vars.workflow_date}.csv`;
+  const projectName = dataform.projectConfig.defaultDatabase;
+  const schemaName = "import"; 
+}
+
+load data into ${projectName}.${schemaName}.item_${dataform.projectConfig.vars.workflow_date}
+(productid STRING, itemname STRING, created_at TIMESTAMP)
+from files(
+    format = 'CSV',
+    skip_leading_rows = 1,
+    uris = ["${gcsFilePath}"]
+)
