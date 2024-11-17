@@ -11,6 +11,9 @@ js {
   const projectName = dataform.projectConfig.defaultDatabase;
   const schemaName = "import"; 
 }
+-- 既存データを削除（洗い替え）
+TRUNCATE TABLE ${projectName}.${schemaName}.item_${dataform.projectConfig.vars.workflow_date};
+
 
 load data into ${projectName}.${schemaName}.item_${dataform.projectConfig.vars.workflow_date}
 (productid STRING, itemname STRING, created_at TIMESTAMP)
