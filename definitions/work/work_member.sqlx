@@ -1,0 +1,58 @@
+config {
+  type: "operations",
+  schema: "work",
+  dependencies: ["import_member"]
+}
+
+js {
+  const projectName = dataform.projectConfig.defaultDatabase;
+  const schemaName = "work"; 
+}
+
+-- 重複除去後のデータを挿入
+INSERT INTO `${projectName}.work.member` (
+  memberid,
+  gender,
+  age,
+  address,
+  created_at,
+  fromDate,
+  toDate
+)
+SELECT
+  memberid,
+  gender,
+  age,
+  address,
+  created_at,
+  TIMESTAMP_TRUNC(created_at, DAY) as fromDate,
+  TIMESTAMP('9999-12-31 23:59:59.999999') AS toDate
+FROM
+  `${projectName}.import.member_${dataform.projectConfig.vars.workflow_date}`;
+
+-- 必要に応じてデータを更新
+UPDATE
+  `${projectName}.work.member` T
+SET
+  toDate = TIMESTAMP_SUB(TIMESTAMP_TRUNC(S.fromDate, DAY), INTERVAL 1 microsecond)
+FROM (
+  SELECT
+    *
+  FROM (
+    SELECT
+      *,
+      ROW_NUMBER() OVER (PARTITION BY memberid ORDER BY fromDate DESC) AS row_number
+    FROM
+      `${projectName}.work.member`)
+  WHERE
+    row_number = 1) S
+WHERE
+  T.toDate = TIMESTAMP('9999-12-31 23:59:59.999999')
+  AND T.memberid = S.memberid
+  AND T.fromDate != S.fromDate
+;
+
+-- 重複を除去したデータを一時テーブルに保存
+CREATE OR REPLACE TABLE `${projectName}.work.member` AS
+SELECT DISTINCT * 
+FROM `${projectName}.work.member`;
