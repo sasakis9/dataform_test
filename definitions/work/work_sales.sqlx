@@ -1,6 +1,8 @@
 config {
   type: "operations",
+  hasOutput: true,
   schema: "work",
+  name: "sales",
   dependencies: ["import_sales"]
 }
 
