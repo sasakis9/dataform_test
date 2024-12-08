@@ -4,33 +4,6 @@ config {
 }
 
 SELECT
-  slipid,
-  linenumber,
-  salesdate,
-  memberid,
-  gender,
-  CASE 
-    WHEN age < 10 THEN "0～9歳"
-    WHEN age < 20 THEN "10～19歳"
-    WHEN age < 30 THEN "20～29歳"
-    WHEN age < 40 THEN "30～39歳"
-    WHEN age < 50 THEN "40～49歳"
-    WHEN age < 60 THEN "50～59歳"
-    ELSE "60歳以上" END AS nendai,
-  address,
-  productid,
-  storeid,
-  amount,
-  quantity
+  *
 FROM
-  ${ref("sales")}
-LEFT JOIN
-  (
-  SELECT
-    *
-  FROM
-    ${ref("member")}
-  WHERE
-    DATE(toDate) = DATE("9999-12-31")
-  )
-USING(memberid)
+  `dicp-430603.work.member`
