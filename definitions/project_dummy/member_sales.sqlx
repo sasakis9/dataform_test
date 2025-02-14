@@ -4,7 +4,7 @@ config {
 }
 
 SELECT
-  slipid,
+  slipid, 
   linenumber,
   salesdate,
   memberid,
